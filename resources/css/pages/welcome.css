@@ -16,7 +16,12 @@
     justify-content: center;
     position: relative;
     z-index: 1;
-    overflow: hidden; /* Фикс выпирания контента при анимации */
+    overflow: hidden;
+}
+
+.welcome-screen--exiting {
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .welcome-screen__center {
@@ -33,11 +38,7 @@
     font-weight: 700;
     letter-spacing: .05rem;
     user-select: none;
-    
-    /* Начальное состояние */
     opacity: 0;
-    
-    /* Анимация входа */
     animation: titleEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -76,42 +77,7 @@
     bottom: 60px;
     display: flex;
     gap: 16px;
-    
-    /* Состояние по умолчанию */
-    opacity: 0;
-    
-    /* Анимация входа */
-    animation: buttonsEntry 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s; /* Небольшая задержка после текста */
-}
-
-.welcome-screen--exiting .welcome-screen__bottom {
-    animation: buttonsExit 0.3s ease-in forwards !important;
-}
-
-@keyframes buttonsEntry {
-    from {
-        opacity: 0;
-        filter: blur(10px);
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateY(0);
-    }
-}
-
-@keyframes buttonsExit {
-    from {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        filter: blur(10px);
-        transform: translateY(40px);
-    }
+    z-index: 10;
 }
 
 .welcome-screen__action {
@@ -125,15 +91,51 @@
     padding: 12px 24px;
     border-radius: 999px;
     background: var(--blacktransp);
-    backdrop-filter: blur(12px) !important; /* Усиливаем приоритет */
+    backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     color: var(--white);
     border: var(--border) 1px solid;
     font-size: 15px;
     text-decoration: none;
-    transition: transform 0.2s ease, background 0.2s ease, scale 0.2s ease;
     user-select: none;
-    will-change: transform, opacity;
+    
+    /* Начальное состояние для анимации входа */
+    opacity: 0;
+    transform: translateY(40px);
+    
+    /* Анимация входа */
+    animation: buttonFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+    transition: background 0.2s ease, scale 0.2s ease, transform 0.2s ease;
+}
+
+.welcome-screen--exiting .welcome-screen__action {
+    animation: buttonFadeOut 0.3s ease-in forwards !important;
+}
+
+@keyframes buttonFadeIn {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonFadeOut {
+    from {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(40px);
+    }
 }
 
 .welcome-screen__action:hover {

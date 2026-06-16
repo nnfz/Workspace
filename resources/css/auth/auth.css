@@ -19,6 +19,8 @@
 .auth-page__logo {
     font-family: var(--fontmono);
     font-size: 18px;
+    text-decoration: none;
+    -webkit-user-select: none;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;

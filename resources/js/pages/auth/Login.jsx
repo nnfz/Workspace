@@ -35,7 +35,7 @@ export default function Login() {
     return (
         <div className={`auth-page ${isExiting ? 'auth-page--exiting' : ''}`}>
             <div className="auth-page__logo">
-                <Link to="/" onClick={(e) => handleBack(e, '/')} style={{ textDecoration: 'none' }}>
+                <Link to="/" onClick={(e) => handleBack(e, '/')}>
                     <GlitchText text="Workspace" />
                 </Link>
             </div>

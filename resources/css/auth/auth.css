@@ -18,14 +18,24 @@
 
 .auth-page__logo {
     font-family: var(--fontmono);
-    font-size: 18px;
-    text-decoration: none;
-    -webkit-user-select: none;
+    font-size: 28px;
+    margin-bottom: 20px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--white);
     user-select: none;
+}
+
+.auth-page__logo a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.auth-page__logo h1 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
 }
 
 .auth-page__inner {

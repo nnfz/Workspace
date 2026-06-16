@@ -43,10 +43,10 @@ class WorkspaceController extends Controller
         ];
     }
 
-    return view('workspace.week-board', [
+    return response()->json([
         'days' => $days,
-        'startOfWeek' => $startOfWeek,
-        'endOfWeek' => $endOfWeek,
+        'startOfWeek' => $startOfWeek->toDateString(),
+        'endOfWeek' => $endOfWeek->toDateString(),
     ]);
 }
 public function notebook(Request $request)
@@ -71,7 +71,7 @@ public function notebook(Request $request)
         ->orderBy('id')
         ->get();
 
-    return view('workspace.notebook', [
+    return response()->json([
         'sheets' => $sheets,
         'activeSheet' => $activeSheet,
         'blocks' => $blocks,
@@ -171,8 +171,8 @@ public function month(Request $request, ?string $month = null)
         $days[] = $row;
     }
 
-    return view('workspace.month-view', [
-        'currentMonth' => $currentMonth,
+    return response()->json([
+        'currentMonth' => $currentMonth->format('Y-m'),
         'days' => $days,
         'weeksCount' => $weeksCount,
         'prevMonth' => $currentMonth->copy()->subMonth()->format('Y-m'),

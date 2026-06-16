@@ -8,8 +8,19 @@
     },
     "devDependencies": {
         "autoprefixer": "^10.4.2",
-        "laravel-vite-plugin": "^1.2.0",
         "postcss": "^8.4.31",
         "vite": "^6.2.4"
+    },
+    "dependencies": {
+        "@hello-pangea/dnd": "^18.0.1",
+        "@react-three/drei": "^10.7.7",
+        "@react-three/fiber": "^9.6.1",
+        "@vitejs/plugin-react": "^4.7.0",
+        "axios": "^1.18.0",
+        "date-fns": "^4.4.0",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "react-router-dom": "^7.17.0",
+        "three": "^0.184.0"
     }
 }

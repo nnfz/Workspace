@@ -1,0 +1,111 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import GlitchText from '../../components/GlitchText';
+
+export default function Register() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
+        try {
+            await axios.get('/sanctum/csrf-cookie');
+            await axios.post('/register', { 
+                name, 
+                email, 
+                password, 
+                password_confirmation: passwordConfirmation 
+            });
+            navigate('/workspace/week');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Ошибка регистрации');
+        }
+    };
+
+    return (
+        <div className="auth-page">
+            <div className="auth-page__logo">
+                <GlitchText text="Workspace" />
+            </div>
+
+            <div className="auth-page__inner">
+                <h1 className="auth-page__title">Регистрация</h1>
+
+                {error && (
+                    <div className="auth-message auth-message--error">
+                        <ul className="auth-message__list">
+                            <li>{error}</li>
+                        </ul>
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="auth-form">
+                    <div className="auth-form__group">
+                        <label htmlFor="name" className="auth-form__label">Имя</label>
+                        <input
+                            id="name"
+                            className="auth-form__input"
+                            type="text"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            required
+                            autoFocus
+                        />
+                    </div>
+
+                    <div className="auth-form__group">
+                        <label htmlFor="email" className="auth-form__label">Электронная почта</label>
+                        <input
+                            id="email"
+                            className="auth-form__input"
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="auth-form__group">
+                        <label htmlFor="password" className="auth-form__label">Пароль</label>
+                        <input
+                            id="password"
+                            className="auth-form__input"
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="auth-form__group">
+                        <label htmlFor="password_confirmation" className="auth-form__label">Подтвердите пароль</label>
+                        <input
+                            id="password_confirmation"
+                            className="auth-form__input"
+                            type="password"
+                            value={passwordConfirmation}
+                            onChange={e => setPasswordConfirmation(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="auth-form__row auth-form__row--end">
+                        <Link to="/login" className="auth-link">
+                            Уже есть аккаунт? Войти
+                        </Link>
+                    </div>
+
+                    <button type="submit" className="auth-button">
+                        Зарегистрироваться
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+}

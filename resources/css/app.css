@@ -15,9 +15,31 @@
 @import "./pages/month-view.css";
 @import "./pages/notebook.css";
 
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
 
+:root{
+    --fontmono: 'Source Code Pro';
+    --font: 'Google Sans';
+    
+    --accent: #2395ff;
+    --accent2: #235d94;
+    --accentdis: #17334d;
+    --black: #111111;
+    --white: #efefef;
+    --gray: #b4b4b4;
+    --gray2: #888888;
+    --border: rgba(239, 239, 239, .2);
+    --borderhover: rgba(239, 239, 239, .3);
+    --borderactive: rgba(51, 156, 255, 0.4);
+    --blacktransp: rgba(17, 17, 17, .2);
+}
 
-
+body {
+    margin: 0;
+    background-color: var(--black);
+    color: var(--white);
+    font-family: var(--font);
+}
 
 .visually-hidden {
     position: absolute;

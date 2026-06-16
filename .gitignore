@@ -31,6 +31,7 @@ auth.json
 npm-debug.log
 yarn-error.log
 pnpm-debug.log
+package-lock.json
 
 .DS_Store
 Thumbs.db

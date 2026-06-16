@@ -9,7 +9,16 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
     const [error, setError] = useState(null);
+    const [isExiting, setIsExiting] = useState(false);
     const navigate = useNavigate();
+
+    const handleBack = (e, to) => {
+        e.preventDefault();
+        setIsExiting(true);
+        setTimeout(() => {
+            navigate(to);
+        }, 250);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,9 +33,11 @@ export default function Login() {
     };
 
     return (
-        <div className="auth-page">
+        <div className={`auth-page ${isExiting ? 'auth-page--exiting' : ''}`}>
             <div className="auth-page__logo">
-                <GlitchText text="Workspace" />
+                <Link to="/" onClick={(e) => handleBack(e, '/')} style={{ textDecoration: 'none' }}>
+                    <GlitchText text="Workspace" />
+                </Link>
             </div>
             
             <div className="auth-page__inner">
@@ -85,7 +96,7 @@ export default function Login() {
                     </button>
                     
                     <div className="auth-form__row auth-form__row--end">
-                        <Link to="/register" className="auth-link">
+                        <Link to="/register" onClick={(e) => handleBack(e, '/register')} className="auth-link">
                             Нет аккаунта? Регистрация
                         </Link>
                     </div>

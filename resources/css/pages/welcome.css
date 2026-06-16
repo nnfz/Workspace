@@ -1,11 +1,10 @@
-
-
 .welcome-body {
     margin: 0;
     min-height: 100vh;
     display: grid;
     place-items: center;
     color: var(--white);
+    background-color: var(--black);
 }
 
 .welcome-screen {
@@ -20,10 +19,9 @@
     transition: opacity 0.3s ease;
 }
 
-.welcome-screen--exiting .welcome-screen__bottom {
-    transform: translateY(100px);
+.welcome-screen--exiting {
     opacity: 0;
-    transition: transform 0.25s ease-in, opacity 0.2s ease-in;
+    pointer-events: none;
 }
 
 .welcome-screen__center {
@@ -36,8 +34,44 @@
     bottom: 60px;
     display: flex;
     gap: 16px;
+    
+    /* Состояние по умолчанию */
+    opacity: 0;
+    
+    /* Анимация входа по умолчанию */
+    animation: buttonsEntry 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Анимация выхода - через отдельный keyframes, чтобы точно сработало */
+.welcome-screen--exiting .welcome-screen__bottom {
+    animation: buttonsExit 0.3s ease-in forwards !important;
+}
+
+@keyframes buttonsEntry {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(60px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonsExit {
+    from {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateY(60px);
+    }
+}
 
 .welcome-screen__title {
     font-family: var(--fontmono), monospace;
@@ -68,6 +102,7 @@
     transition: .2s ease;
     user-select: none;
 }
+
 .welcome-screen__action:hover {
     background: var(--white);
     color: var(--black);

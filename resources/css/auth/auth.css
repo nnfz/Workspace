@@ -25,6 +25,39 @@
     text-transform: uppercase;
     color: var(--white);
     user-select: none;
+    
+    /* Анимация появления */
+    animation: logoEntry 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.auth-page--exiting .auth-page__logo {
+    animation: logoExit 0.3s ease-in forwards;
+}
+
+@keyframes logoEntry {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+        scale: .8;
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        scale: 1;
+    }
+}
+
+@keyframes logoExit {
+    from {
+        opacity: 1;
+        filter: blur(0);
+        scale: 1;
+    }
+    to {
+        opacity: 0;
+        filter: blur(10px);
+        scale: .8;
+    }
 }
 
 .auth-page__logo a {

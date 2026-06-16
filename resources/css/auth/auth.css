@@ -13,6 +13,7 @@
     justify-content: center;
     gap: 24px;
     padding: 24px;
+    overflow: hidden; /* Фикс выпирания при анимации */
 }
 
 .auth-page__logo {

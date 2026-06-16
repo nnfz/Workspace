@@ -16,6 +16,7 @@
     justify-content: center;
     position: relative;
     z-index: 1;
+    overflow: hidden; /* Фикс выпирания контента при анимации */
 }
 
 .welcome-screen__center {

@@ -16,17 +16,58 @@
     justify-content: center;
     position: relative;
     z-index: 1;
-    transition: opacity 0.3s ease;
-}
-
-.welcome-screen--exiting {
-    opacity: 0;
-    pointer-events: none;
 }
 
 .welcome-screen__center {
     width: 100%;
     text-align: center;
+    perspective: 1000px;
+}
+
+.welcome-screen__title {
+    font-family: var(--fontmono), monospace;
+    margin: 0 0 24px;
+    font-size: clamp(40px, 8vw, 88px);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: .05rem;
+    user-select: none;
+    
+    /* Начальное состояние */
+    opacity: 0;
+    
+    /* Анимация входа */
+    animation: titleEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.welcome-screen--exiting .welcome-screen__title {
+    animation: titleExit 0.3s ease-in forwards !important;
+}
+
+@keyframes titleEntry {
+    from {
+        opacity: 0;
+        filter: blur(20px);
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+    }
+}
+
+@keyframes titleExit {
+    from {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        filter: blur(20px);
+        transform: scale(1.1);
+    }
 }
 
 .welcome-screen__bottom {
@@ -38,11 +79,10 @@
     /* Состояние по умолчанию */
     opacity: 0;
     
-    /* Анимация входа по умолчанию */
-    animation: buttonsEntry 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    /* Анимация входа */
+    animation: buttonsEntry 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s; /* Небольшая задержка после текста */
 }
 
-/* Анимация выхода - через отдельный keyframes, чтобы точно сработало */
 .welcome-screen--exiting .welcome-screen__bottom {
     animation: buttonsExit 0.3s ease-in forwards !important;
 }
@@ -51,7 +91,7 @@
     from {
         opacity: 0;
         filter: blur(10px);
-        transform: translateY(60px);
+        transform: translateY(40px);
     }
     to {
         opacity: 1;
@@ -69,18 +109,8 @@
     to {
         opacity: 0;
         filter: blur(10px);
-        transform: translateY(60px);
+        transform: translateY(40px);
     }
-}
-
-.welcome-screen__title {
-    font-family: var(--fontmono), monospace;
-    margin: 0 0 24px;
-    font-size: clamp(40px, 8vw, 88px);
-    line-height: 0.95;
-    font-weight: 700;
-    letter-spacing: .05rem;
-    user-select: none;
 }
 
 .welcome-screen__action {
@@ -94,13 +124,15 @@
     padding: 12px 24px;
     border-radius: 999px;
     background: var(--blacktransp);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px) !important; /* Усиливаем приоритет */
+    -webkit-backdrop-filter: blur(12px) !important;
     color: var(--white);
     border: var(--border) 1px solid;
     font-size: 15px;
     text-decoration: none;
-    transition: .2s ease;
+    transition: transform 0.2s ease, background 0.2s ease, scale 0.2s ease;
     user-select: none;
+    will-change: transform, opacity;
 }
 
 .welcome-screen__action:hover {
@@ -111,6 +143,4 @@
 
 .welcome-screen__action:active {
     scale: .97;
-    background: var(--blacktransp);
-    color: var(--white);
 }

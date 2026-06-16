@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/app.css';
 
@@ -21,29 +21,30 @@ import Notebook from './pages/Notebook';
 import GuestLayout from './layouts/GuestLayout';
 import WorkspaceLayout from './layouts/WorkspaceLayout';
 
+const router = createBrowserRouter([
+    {
+        element: <GuestLayout />,
+        children: [
+            { path: "/", element: <Welcome /> },
+            { path: "/login", element: <Login /> },
+            { path: "/register", element: <Register /> },
+        ]
+    },
+    {
+        element: <WorkspaceLayout />,
+        children: [
+            { path: "/profile", element: <Profile /> },
+            { path: "/workspace/week/:date?", element: <WeekBoard /> },
+            { path: "/workspace/month/:month?", element: <MonthView /> },
+            { path: "/workspace/notebook", element: <Notebook /> },
+        ]
+    },
+    { path: "/workspace/*", element: <Navigate to="/workspace/week" replace /> },
+    { path: "*", element: <Navigate to="/" replace /> },
+]);
+
 function App() {
-    return (
-        <BrowserRouter>
-            <Routes>
-                {/* Guest routes share the same layout for smooth transitions */}
-                <Route element={<GuestLayout />}>
-                    <Route path="/" element={<Welcome />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                </Route>
-
-                <Route element={<WorkspaceLayout />}>
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/workspace/week/:date?" element={<WeekBoard />} />
-                    <Route path="/workspace/month/:month?" element={<MonthView />} />
-                    <Route path="/workspace/notebook" element={<Notebook />} />
-                </Route>
-
-                <Route path="/workspace/*" element={<Navigate to="/workspace/week" replace />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-        </BrowserRouter>
-    );
+    return <RouterProvider router={router} />;
 }
 
 const rootElement = document.getElementById('app');

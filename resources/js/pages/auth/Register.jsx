@@ -9,16 +9,7 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [error, setError] = useState(null);
-    const [isExiting, setIsExiting] = useState(false);
     const navigate = useNavigate();
-
-    const handleBack = (e, to) => {
-        e.preventDefault();
-        setIsExiting(true);
-        setTimeout(() => {
-            navigate(to);
-        }, 250);
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,9 +29,9 @@ export default function Register() {
     };
 
     return (
-        <div className={`auth-page ${isExiting ? 'auth-page--exiting' : ''}`}>
+        <div className="auth-page">
             <div className="auth-page__logo">
-                <Link to="/" onClick={(e) => handleBack(e, '/')} style={{ textDecoration: 'none' }}>
+                <Link to="/">
                     <GlitchText text="Workspace" />
                 </Link>
             </div>
@@ -107,7 +98,7 @@ export default function Register() {
                     </div>
 
                     <div className="auth-form__row auth-form__row--end">
-                        <Link to="/login" onClick={(e) => handleBack(e, '/login')} className="auth-link">
+                        <Link to="/login" className="auth-link">
                             Уже есть аккаунт? Войти
                         </Link>
                     </div>

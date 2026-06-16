@@ -8,37 +8,42 @@ use App\Models\NoteBlock;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\NotebookSheet;
+use App\Models\User;
 
 class NoteBlockController extends Controller
 {
+    private function getGuestUser(): User
+    {
+        return User::first() ?? User::factory()->create();
+    }
+
     public function store(StoreNoteBlockRequest $request): JsonResponse
-{
-    $sheetId = (int) $request->validated()['sheet_id'];
+    {
+        $user = $this->getGuestUser();
+        $sheetId = (int) $request->validated()['sheet_id'];
 
-    $sheet = $request->user()
-        ->notebookSheets()
-        ->findOrFail($sheetId);
+        $sheet = $user->notebookSheets()->findOrFail($sheetId);
 
-    $payload = $request->validated();
+        $payload = $request->validated();
 
-    $block = $sheet->noteBlocks()->create([
-        'user_id' => $request->user()->id,
-        'content' => $payload['content'] ?? '',
-        'x' => $payload['x'],
-        'y' => $payload['y'],
-    ]);
+        $block = $sheet->noteBlocks()->create([
+            'user_id' => $user->id,
+            'content' => $payload['content'] ?? '',
+            'x' => $payload['x'],
+            'y' => $payload['y'],
+        ]);
 
-    return response()->json([
-        'success' => true,
-        'block' => $this->serializeBlock($block),
-    ], 201);
-}
+        return response()->json([
+            'success' => true,
+            'block' => $this->serializeBlock($block),
+        ], 201);
+    }
 
     public function update(UpdateNoteBlockRequest $request, int $id): JsonResponse
     {
+        $user = $this->getGuestUser();
         try {
-            $block = $request->user()->noteBlocks()->findOrFail($id);
+            $block = $user->noteBlocks()->findOrFail($id);
         } catch (ModelNotFoundException) {
             return response()->json([
                 'success' => false,
@@ -57,8 +62,9 @@ class NoteBlockController extends Controller
 
     public function destroy(Request $request, int $id): JsonResponse
     {
+        $user = $this->getGuestUser();
         try {
-            $block = $request->user()->noteBlocks()->findOrFail($id);
+            $block = $user->noteBlocks()->findOrFail($id);
         } catch (ModelNotFoundException) {
             return response()->json([
                 'success' => false,

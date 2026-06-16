@@ -3,6 +3,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import TaskCard from '../components/TaskCard';
+import WorkspaceActions from '../components/WorkspaceActions';
+import TaskModal from '../components/TaskModal';
 
 function TaskComposer({ date, onAdd, onCancel }) {
     const [title, setTitle] = useState('');
@@ -60,6 +62,7 @@ export default function WeekBoard() {
     const [weekData, setWeekData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [composingDate, setComposingDate] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     useEffect(() => {
         fetchWeek();
@@ -185,7 +188,13 @@ export default function WeekBoard() {
                                             <div className="week-column__empty">На этот день карточек нет.</div>
                                         )}
                                         {day.tasks.map((task, index) => (
-                                            <TaskCard key={task.id} task={task} index={index} onToggleDone={handleToggleDone} />
+                                            <TaskCard 
+                                                key={task.id} 
+                                                task={task} 
+                                                index={index} 
+                                                onToggleDone={handleToggleDone} 
+                                                onClick={() => setSelectedTask(task)}
+                                            />
                                         ))}
                                         {provided.placeholder}
                                         
@@ -235,6 +244,7 @@ export default function WeekBoard() {
                         tasks: d.tasks.filter(t => t.id !== taskId)
                     }));
                     setWeekData({ ...weekData, days: newDays });
+                    setSelectedTask(null);
                 }}
             />
         </div>

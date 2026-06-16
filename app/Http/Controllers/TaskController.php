@@ -6,21 +6,29 @@ use App\Http\Requests\ReorderTasksRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Services\TaskOrderingService;
+
 class TaskController extends Controller
 {   
     public function __construct(
         private readonly TaskOrderingService $taskOrdering
     ) {
-    }    
+    }
+
+    private function getGuestId(): int
+    {
+        // Возвращаем ID первого пользователя как общего владельца данных
+        return (int) User::first()?->id ?? 1;
+    }
+
     public function list(): JsonResponse
     {
         $tasks = Task::query()
-            ->where('user_id', Auth::id())
+            ->where('user_id', $this->getGuestId())
             ->orderBy('scheduled_for')
             ->orderBy('position')
             ->orderBy('id')
@@ -32,7 +40,7 @@ class TaskController extends Controller
 
     public function store(StoreTaskRequest $request): JsonResponse
     {
-        $userId = (int) Auth::id();
+        $userId = $this->getGuestId();
         $validated = $request->validated();
         $validated['status'] ??= 'todo';
 
@@ -57,8 +65,7 @@ class TaskController extends Controller
 
     public function update(UpdateTaskRequest $request, int $id): JsonResponse
     {    
-        $userId = (int) Auth::id();
-        
+        $userId = $this->getGuestId();
         
         try {
             $task = $this->taskOrdering->findUserTask($userId, $id);
@@ -69,7 +76,6 @@ class TaskController extends Controller
             ], 404);
         }
 
-        
         $validated = $request->validated();
         $validated['status'] ??= $task->status ?? 'todo';
 
@@ -99,9 +105,8 @@ class TaskController extends Controller
 
     public function destroy(int $id): JsonResponse
     {   
-        $userId = (int) Auth::id();
+        $userId = $this->getGuestId();
 
-        
         try {
             $task = $this->taskOrdering->findUserTask($userId, $id);
         } catch (ModelNotFoundException) {
@@ -111,14 +116,13 @@ class TaskController extends Controller
             ], 404);
         }
 
-        $taskUserId = (int) $task->user_id;
         $scheduledFor = $task->scheduled_for?->toDateString();
 
-        DB::transaction(function () use ($task, $taskUserId, $scheduledFor) {
+        DB::transaction(function () use ($task, $userId, $scheduledFor) {
             $task->delete();
 
             if ($scheduledFor) {
-                $this->taskOrdering->normalizePositionsForDate($taskUserId, $scheduledFor);
+                $this->taskOrdering->normalizePositionsForDate($userId, $scheduledFor);
             }
         });
 
@@ -131,7 +135,7 @@ class TaskController extends Controller
     public function reorder(ReorderTasksRequest $request): JsonResponse
     {
         $data = $request->validated();
-        $userId = (int) Auth::id();
+        $userId = $this->getGuestId();
 
         $this->taskOrdering->reorderColumns($userId, $data['columns']);
 

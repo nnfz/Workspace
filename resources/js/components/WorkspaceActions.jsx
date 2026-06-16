@@ -1,17 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
 
 export default function WorkspaceActions({ activeMode }) {
-    const handleLogout = async () => {
-        try {
-            await axios.post('/logout');
-            window.location.href = '/';
-        } catch (err) {
-            console.error('Logout error', err);
-        }
-    };
-
     return (
         <div className="workspace-actions">
             <nav className="workspace-nav">
@@ -34,15 +24,6 @@ export default function WorkspaceActions({ activeMode }) {
                     Блокнот
                 </NavLink>
             </nav>
-
-            <div className="profile-dropdown">
-                <a href="/profile" className="profile-dropdown__trigger">
-                    Профиль
-                </a>
-                <button type="button" onClick={handleLogout} className="profile-dropdown__logout">
-                    Выйти
-                </button>
-            </div>
         </div>
     );
 }

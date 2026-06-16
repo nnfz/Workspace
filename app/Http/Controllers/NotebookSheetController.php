@@ -6,12 +6,18 @@ use App\Models\NotebookSheet;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class NotebookSheetController extends Controller
 {
+    private function getGuestUser(): User
+    {
+        return User::first() ?? User::factory()->create();
+    }
+
     public function store(Request $request): RedirectResponse
     {
-        $user = $request->user();
+        $user = $this->getGuestUser();
 
         $nextOrder = (int) $user->notebookSheets()->max('display_order') + 1;
 
@@ -19,27 +25,23 @@ class NotebookSheetController extends Controller
             'display_order' => $nextOrder,
         ]);
 
-        return redirect()->route('workspace.notebook', [
-            'sheet' => $sheet->id,
-        ]);
+        return redirect()->to('/workspace/notebook?sheet=' . $sheet->id);
     }
 
     public function destroy(Request $request, int $id): RedirectResponse
     {
-        $user = $request->user();
+        $user = $this->getGuestUser();
 
         $sheets = $user->notebookSheets()
             ->orderBy('display_order')
             ->get();
 
             if ($sheets->isEmpty()) {
-                return redirect()->route('workspace.notebook');
+                return redirect()->to('/workspace/notebook');
             }
             
             if ($sheets->count() === 1) {
-                return redirect()->route('workspace.notebook', [
-                    'sheet' => $sheets->first()->id,
-                ]);
+                return redirect()->to('/workspace/notebook?sheet=' . $sheets->first()->id);
             }
 
         $sheet = $sheets->firstWhere('id', $id);
@@ -69,8 +71,6 @@ class NotebookSheetController extends Controller
             }
         });
 
-        return redirect()->route('workspace.notebook', [
-            'sheet' => $fallbackSheet->id,
-        ]);
+        return redirect()->to('/workspace/notebook?sheet=' . $fallbackSheet->id);
     }
 }

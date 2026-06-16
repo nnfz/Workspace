@@ -4,11 +4,13 @@ import axios from 'axios';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import TaskCard from '../components/TaskCard';
 import WorkspaceActions from '../components/WorkspaceActions';
+import TaskModal from '../components/TaskModal';
 
 export default function MonthView() {
     const { month } = useParams();
     const [monthData, setMonthData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     useEffect(() => {
         fetchMonth();
@@ -91,7 +93,7 @@ export default function MonthView() {
     };
 
     if (loading || !monthData) {
-        return <div className="p-4">Загрузка месяца...</div>;
+        return <div className="p-4 text-white">Загрузка месяца...</div>;
     }
 
     const { currentMonth, prevMonth, nextMonth, days, weeksCount } = monthData;
@@ -101,7 +103,7 @@ export default function MonthView() {
     const monthTitle = dateObj.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
 
     return (
-        <div className="month-view" style={{ '--month-weeks': weeksCount }}>
+        <div className="month-page" style={{ '--month-weeks': weeksCount }}>
             <div className="month-toolbar">
                 <div className="month-toolbar__nav">
                     <Link to={`/workspace/month/${prevMonth}`} className="month-toolbar__arrow">←</Link>
@@ -111,16 +113,17 @@ export default function MonthView() {
                     <Link to={`/workspace/month/${nextMonth}`} className="month-toolbar__arrow">→</Link>
                     <Link to="/workspace/month" className="month-toolbar__today">Сегодня</Link>
                 </div>
+                <WorkspaceActions activeMode="month" />
             </div>
 
             <div className="month-weekdays">
-                <div>Понедельник</div>
-                <div>Вторник</div>
-                <div>Среда</div>
-                <div>Четверг</div>
-                <div>Пятница</div>
-                <div>Суббота</div>
-                <div>Воскресенье</div>
+                <div>Пн</div>
+                <div>Вт</div>
+                <div>Ср</div>
+                <div>Чт</div>
+                <div>Пт</div>
+                <div>Сб</div>
+                <div>Вс</div>
             </div>
 
             <DragDropContext onDragEnd={handleDragEnd}>
@@ -141,7 +144,13 @@ export default function MonthView() {
 
                                         <div className="month-day__content">
                                             {day.tasks.map((task, index) => (
-                                                <TaskCard key={task.id} task={task} index={index} onToggleDone={handleToggleDone} />
+                                                <TaskCard 
+                                                    key={task.id} 
+                                                    task={task} 
+                                                    index={index} 
+                                                    onToggleDone={handleToggleDone}
+                                                    onClick={() => setSelectedTask(task)} 
+                                                />
                                             ))}
                                             {provided.placeholder}
                                         </div>
@@ -175,6 +184,7 @@ export default function MonthView() {
                         }))
                     );
                     setMonthData({ ...monthData, days: newDays });
+                    setSelectedTask(null);
                 }}
             />
         </div>

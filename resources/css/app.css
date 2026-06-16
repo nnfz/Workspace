@@ -1,10 +1,7 @@
-@import "./pages/welcome.css";
 @import "./ui/buttons.css";
 @import "./ui/forms.css";
 @import "./ui/alerts.css";
 @import "./ui/dropdown.css";
-
-@import "./auth/auth.css";
 
 @import "./modals/modal-base.css";
 @import "./modals/task-modal.css";
@@ -40,19 +37,10 @@ html {
 
 body {
     margin: 0;
-    background-color: transparent;
+    background-color: var(--black);
     color: var(--white);
     font-family: var(--font);
     overflow-x: hidden;
-}
-
-/* Ускоряем всё что движется */
-.welcome-screen__title,
-.welcome-screen__action,
-.auth-page__logo,
-.auth-page__inner {
-    will-change: transform, opacity, filter;
-    backface-visibility: hidden;
 }
 
 .visually-hidden {

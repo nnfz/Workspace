@@ -40,9 +40,19 @@ html {
 
 body {
     margin: 0;
-    background-color: transparent; /* Важно: прозрачный фон чтобы видеть шейдер */
+    background-color: transparent;
     color: var(--white);
     font-family: var(--font);
+    overflow-x: hidden;
+}
+
+/* Ускоряем всё что движется */
+.welcome-screen__title,
+.welcome-screen__action,
+.auth-page__logo,
+.auth-page__inner {
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
 }
 
 .visually-hidden {

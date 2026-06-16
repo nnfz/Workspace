@@ -17,14 +17,11 @@
     position: relative;
     z-index: 1;
     overflow: hidden;
-    
-    /* Убрал transition, всё на анимациях для синхронности */
 }
 
 .welcome-screen__center {
     width: 100%;
     text-align: center;
-    perspective: 1000px;
 }
 
 .welcome-screen__title {
@@ -39,7 +36,6 @@
     animation: titleEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Глобальный класс выхода из лейаута */
 .guest-layout--exiting .welcome-screen__title {
     animation: titleExit 0.3s ease-in forwards !important;
 }
@@ -48,7 +44,7 @@
     from {
         opacity: 0;
         filter: blur(20px);
-        transform: scale(0.9);
+        transform: scale(0.95);
     }
     to {
         opacity: 1;
@@ -66,7 +62,7 @@
     to {
         opacity: 0;
         filter: blur(20px);
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
 }
 
@@ -98,7 +94,8 @@
     user-select: none;
     
     opacity: 0;
-    animation: buttonFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+    transform: translateY(20px);
+    animation: buttonFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
     transition: background 0.2s ease, scale 0.2s ease;
 }
 
@@ -110,7 +107,7 @@
     from {
         opacity: 0;
         filter: blur(10px);
-        transform: translateY(40px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -128,7 +125,7 @@
     to {
         opacity: 0;
         filter: blur(10px);
-        transform: translateY(40px);
+        transform: translateY(20px);
     }
 }
 

@@ -10,7 +10,7 @@ const ShaderPlane = () => {
         uTime: { value: 0 },
         uAspect: { value: 1.0 },
         uColorBg: { value: new THREE.Color('#111111') },
-        uColorWave: { value: new THREE.Color('#444444') }, // Сделал чуть ярче, чтобы было видно
+        uColorWave: { value: new THREE.Color('#676767') }, // Сделал значительно светлее
         uOffset1: { value: new THREE.Vector2(Math.random() * 100, Math.random() * 100) },
         uOffset2: { value: new THREE.Vector2(Math.random() * 100, Math.random() * 100) },
         uFreq1: { value: new THREE.Vector2(1.0 + Math.random() * 3.0, 1.0 + Math.random() * 3.0) },

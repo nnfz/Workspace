@@ -32,6 +32,7 @@
     font-weight: 700;
     letter-spacing: .05rem;
     user-select: none;
+    text-transform: uppercase;
     opacity: 0;
     animation: titleEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
